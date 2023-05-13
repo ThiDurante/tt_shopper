@@ -1,4 +1,7 @@
 import express from 'express';
+import sequelizeCon from './database/connection';
+import productsRouter from './router/productsRouter';
+import packsRouter from './router/packsRouter';
 
 class App {
   public app: express.Express;
@@ -11,20 +14,22 @@ class App {
   private config(): void {
     // set middlewares and routers
     this.app.use(express.json());
+    this.app.use(productsRouter);
+    this.app.use(packsRouter);
   }
 
   public start(PORT: number): void {
     this.app.listen(PORT, async () => {
+      //check if database connection is successful
       try {
-        // await sequelizeCon.sync();
+        await sequelizeCon.authenticate();
+        console.log('Connection has been established successfully.');
       } catch (error) {
-        console.log(error);
+        console.error('Unable to connect to the database:', error);
       }
       console.log(`Listening on port: ${PORT}`);
     });
   }
-
-
 }
 
 export { App };
