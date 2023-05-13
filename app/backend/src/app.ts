@@ -1,7 +1,9 @@
 import express from 'express';
+import cors from 'cors';
 import sequelizeCon from './database/connection';
 import productsRouter from './router/productsRouter';
 import packsRouter from './router/packsRouter';
+import updatePriceRouter from './router/updatePriceRouter';
 
 class App {
   public app: express.Express;
@@ -14,8 +16,10 @@ class App {
   private config(): void {
     // set middlewares and routers
     this.app.use(express.json());
+    this.app.use(cors());
     this.app.use(productsRouter);
     this.app.use(packsRouter);
+    this.app.use(updatePriceRouter);
   }
 
   public start(PORT: number): void {
@@ -23,11 +27,11 @@ class App {
       //check if database connection is successful
       try {
         await sequelizeCon.authenticate();
-        console.log('Connection has been established successfully.');
+        console.log('Conexão com o DB feita com sucesso!');
       } catch (error) {
-        console.error('Unable to connect to the database:', error);
+        console.error('Não foi possível conectar com o DB: ', error);
       }
-      console.log(`Listening on port: ${PORT}`);
+      console.log(`Servidor aberto na porta: ${PORT}`);
     });
   }
 }

@@ -1,5 +1,5 @@
-import ProductServiceI from '../interfaces/ProductServiceI';
-import ProductModelI from '../interfaces/ProductModelI';
+import ProductServiceI from '../interfaces/Product/ProductServiceI';
+import ProductModelI from '../interfaces/Product/ProductModelI';
 
 export default class ProductService implements ProductServiceI {
   constructor(private productModel: ProductModelI) {

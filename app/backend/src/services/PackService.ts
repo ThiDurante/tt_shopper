@@ -1,6 +1,6 @@
-import PackI from '../interfaces/PackI';
-import PackModelI from '../interfaces/PackModelI';
-import PackServiceI from '../interfaces/PackServiceI';
+import PackI from '../interfaces/Pack/PackI';
+import PackModelI from '../interfaces/Pack/PackModelI';
+import PackServiceI from '../interfaces/Pack/PackServiceI';
 
 export default class PackService implements PackServiceI {
   constructor(private packModel: PackModelI) {
