@@ -5,7 +5,6 @@ import ProductI from '../interfaces/ProductI';
 
 export default class ProductModel implements ProductModelI {
   private model: ModelStatic<Product> = Product;
-  constructor() {}
   async getAllProducts(): Promise<ProductI[]> {
     const products = await this.model.findAll();
     return products;

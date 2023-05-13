@@ -1,6 +1,7 @@
 import express from 'express';
 import sequelizeCon from './database/connection';
 import productsRouter from './router/productsRouter';
+import packsRouter from './router/packsRouter';
 
 class App {
   public app: express.Express;
@@ -14,6 +15,7 @@ class App {
     // set middlewares and routers
     this.app.use(express.json());
     this.app.use(productsRouter);
+    this.app.use(packsRouter);
   }
 
   public start(PORT: number): void {
