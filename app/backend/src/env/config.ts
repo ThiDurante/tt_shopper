@@ -10,6 +10,4 @@ const config = {
   MYSQL_PORT: process.env.MYSQL_PORT,
 };
 
-console.log('config', config);
-
 export default config;

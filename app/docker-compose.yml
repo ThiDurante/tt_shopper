@@ -29,6 +29,7 @@ services:
       test: ["CMD", "lsof", "-t", "-i:3001"]
       timeout: 10s
       retries: 5
+    command: dev
   db:
     image: mysql:8.0.26
     container_name: db
