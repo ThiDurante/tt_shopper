@@ -1,5 +1,6 @@
 import express from 'express';
 import sequelizeCon from './database/connection';
+import productsRouter from './router/productsRouter';
 
 class App {
   public app: express.Express;
@@ -12,6 +13,7 @@ class App {
   private config(): void {
     // set middlewares and routers
     this.app.use(express.json());
+    this.app.use(productsRouter);
   }
 
   public start(PORT: number): void {
