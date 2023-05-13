@@ -1,35 +1,66 @@
 import React, { FormEvent, useState } from 'react';
+import Papa, { ParseResult } from 'papaparse';
+
+type Data = {
+  codigo: string;
+  novo_preco: string;
+};
+
 
 function App() {
   const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+
+  const parseCSV = (file: File) => {
+    Papa.parse(file, {
+      header: true,
+      download: true,
+      skipEmptyLines: true,
+      delimiter: ',',
+      complete: handleParseComplete
+      ,
+    });
+  };
+
+  const handleParseComplete = async (results: ParseResult<Data>) => {
+    const result = await uploadFile(results.data)
+    console.log(result);
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) {
       return;
     }
     setFile(e.target.files[0]);
-  };
+  }
 
   const handleValidate = async (e: FormEvent) => {
     e.preventDefault();
     if (!file) {
       return alert('Por favor, selecione um arquivo');
     }
-    const response = await uploadFile(file);
-    const data = await response.json();
-    if (data.error) {
-      return alert(data.error);
+    try {
+      parseCSV(file);
+    } catch (error: any) {
+      console.log(error);
+      setError(error.message);
     }
+
   };
 
-  const uploadFile = (file: File) => {
-    const formData = new FormData();
-    formData.append('csvFile', file, file.name);
-    return fetch('http://127.0.0.1:3001/updateprice', {
+  const uploadFile = async (parsedValue: any) => {
+    const response = await fetch('http://localhost:3001/updateprice', {
       method: 'POST',
-      body: formData,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: 'include',
+      mode: 'cors',
+      body: JSON.stringify(parsedValue),
     });
+    const data = await response.json();
+    return data
   };
 
   return (

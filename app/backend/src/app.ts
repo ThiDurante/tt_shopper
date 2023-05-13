@@ -16,7 +16,12 @@ class App {
   private config(): void {
     // set middlewares and routers
     this.app.use(express.json());
-    this.app.use(cors());
+    this.app.use(
+      cors({
+        origin: 'http://localhost:3000',
+        credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+      })
+    );
     this.app.use(productsRouter);
     this.app.use(packsRouter);
     this.app.use(updatePriceRouter);
