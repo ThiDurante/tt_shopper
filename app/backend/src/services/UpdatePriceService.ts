@@ -24,10 +24,11 @@ export default class UpdatePriceService implements UpdatePriceServiceI {
     const productsToUpdate = products.filter((product) => {
       return file.some((data) => +data.product_code === +product.code);
     });
-    const validatedProducts: UpdatePriceServiceI = this.validateProducts(
+    const validatedProducts: validationProduct[] = this.validateProducts(
       productsToUpdate,
       file
     );
+    console.log(validatedProducts);
 
     throw new Error('Method not implemented.');
   }
@@ -35,11 +36,12 @@ export default class UpdatePriceService implements UpdatePriceServiceI {
   validateProducts(
     dbProducts: ProductI[],
     fileProducts: Data[]
-  ): UpdatePriceServiceI[] {
-    this.checkIfFieldsAreValid(fileProducts);
+  ): validationProduct[] {
+    const validArray = this.checkIfFieldsAreValid(fileProducts);
+    return validArray;
   }
   // checks if fields in file are all valid
-  checkIfFieldsAreValid(fileProducts: Data[]): validationProduct {
+  checkIfFieldsAreValid(fileProducts: Data[]): validationProduct[] {
     const productsChecked = fileProducts.map((product) => {
       if (!product.product_code)
         return { ...product, updated: false, error: 'product_code is missing' };
