@@ -6,7 +6,7 @@ const errorMiddleware = (
   res: Response,
   _next: NextFunction
 ): Response | void => {
-  console.log('error', error);
+  console.log('errorMiddleware: ', error);
   return res.status(500).json({ error: error.message });
 };
 

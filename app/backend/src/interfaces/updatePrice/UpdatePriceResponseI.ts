@@ -3,4 +3,6 @@ export default interface UpdatePriceResponseI {
   name: string;
   newPrice: number;
   oldPrice: number;
+  updated: boolean;
+  error: string;
 }
