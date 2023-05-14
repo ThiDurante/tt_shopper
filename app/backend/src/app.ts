@@ -4,6 +4,7 @@ import sequelizeCon from './database/connection';
 import productsRouter from './router/productsRouter';
 import packsRouter from './router/packsRouter';
 import updatePriceRouter from './router/updatePriceRouter';
+import errorMiddleware from './middlewares/errorMiddleware';
 
 class App {
   public app: express.Express;
@@ -25,6 +26,7 @@ class App {
     this.app.use(productsRouter);
     this.app.use(packsRouter);
     this.app.use(updatePriceRouter);
+    this.app.use(errorMiddleware);
   }
 
   public start(PORT: number): void {
