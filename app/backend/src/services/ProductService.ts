@@ -9,4 +9,14 @@ export default class ProductService implements ProductServiceI {
     const products = await this.productModel.getAllProducts();
     return products;
   }
+
+  async updateProductPrice(code: string, newPrice: string) {
+    const product = await this.productModel.updateProductPrice(code, newPrice);
+    return product;
+  }
+
+  async findByCode(code: string) {
+    const product = await this.productModel.findByCode(code);
+    return product;
+  }
 }

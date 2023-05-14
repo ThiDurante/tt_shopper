@@ -25,7 +25,7 @@ export default class UpdatePriceService implements UpdatePriceServiceI {
     const productsToUpdate = products.filter((product) => {
       return file.some((data) => +data.product_code === +product.code);
     });
-    const validatedProducts: validationProduct[] = this.validateProducts(
+    const validatedProducts: validationProduct[] = await this.validateProducts(
       productsToUpdate,
       file
     );
@@ -33,22 +33,31 @@ export default class UpdatePriceService implements UpdatePriceServiceI {
     throw new Error('Method not implemented.');
   }
   // calls all the validations and returns an array of products to update
-  validateProducts(
+  async validateProducts(
     dbProducts: ProductI[],
     fileProducts: Data[]
-  ): validationProduct[] {
-    const validArray = this.checkIfFieldsAreValid(fileProducts);
-    const validArrayAndPrice = this.checkIfPriceIsIn10PercentRange(
-      dbProducts,
-      validArray
-    );
-    const validArrayPriceAndCost = this.checkIfPriceIsBiggerThanCost(
-      dbProducts,
-      validArrayAndPrice
-    );
-    console.log(validArrayPriceAndCost);
+  ): Promise<validationProduct[]> {
+    const ArrayChecked = this.checkIfFieldsAreValid(fileProducts);
 
-    return validArrayPriceAndCost;
+    const ArrayExistsChecked = await this.checkIfProductsExists(ArrayChecked);
+    const ArrayExistsAndPriceChecked = this.checkIfPriceIsIn10PercentRange(
+      dbProducts,
+      ArrayExistsChecked
+    );
+    const ArrayExistsPriceandCostChecked = this.checkIfPriceIsBiggerThanCost(
+      dbProducts,
+      ArrayExistsAndPriceChecked
+    );
+    console.log(1, ArrayExistsPriceandCostChecked);
+
+    //checking errors
+    const noErrors = ArrayExistsPriceandCostChecked.every(
+      (product) => product.updated === true
+    );
+    if (noErrors) {
+      // update products on db and return success message
+    }
+    return ArrayExistsPriceandCostChecked;
   }
   // checks if fields in file are all valid
   checkIfFieldsAreValid(fileProducts: Data[]): validationProduct[] {
@@ -74,6 +83,25 @@ export default class UpdatePriceService implements UpdatePriceServiceI {
     return fileChecked;
   }
 
+  // validates if all products exists on DB
+  async checkIfProductsExists(
+    fileProducts: validationProduct[]
+  ): Promise<validationProduct[]> {
+    const newFile = Promise.all(
+      fileProducts.map(async (product) => {
+        const productExists = await this.productService.findByCode(
+          product.product_code
+        );
+        if (!productExists) {
+          product.updated = false;
+          product.error += `product_code does not exist. `;
+        }
+      })
+    );
+    await newFile;
+    return fileProducts;
+  }
+
   checkIfPriceIsIn10PercentRange(
     dbProducts: ProductI[],
     fileProducts: validationProduct[]
@@ -84,7 +112,7 @@ export default class UpdatePriceService implements UpdatePriceServiceI {
       );
       //check if price is over or under 10% of current price
       if (productToUpdate) {
-        const currentPrice = +productToUpdate.cost_price;
+        const currentPrice = +productToUpdate.sales_price;
         const newPrice = +product.new_price;
         const tenPercent = currentPrice * 0.1;
         const tenPercentRange = [
@@ -123,5 +151,20 @@ export default class UpdatePriceService implements UpdatePriceServiceI {
       }
     });
     return fileProducts;
+  }
+
+  async updateProducts(
+    products: validationProduct[]
+  ): Promise<UpdatePriceResponseI[]> {
+    const updatedProducts: UpdatePriceResponseI[] = [];
+    products.forEach(async (product) => {
+      if (product.updated) {
+        const updatedProduct = await this.productService.updateProductPrice(
+          product.product_code,
+          product.new_price
+        );
+      }
+    });
+    return updatedProducts;
   }
 }
