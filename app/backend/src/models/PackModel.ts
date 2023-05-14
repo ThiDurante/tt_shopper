@@ -7,6 +7,7 @@ export default class PackModel implements PackModelI {
   private model: ModelStatic<Pack> = Pack;
   async getAllPacks(): Promise<PackI[]> {
     const packs = await this.model.findAll();
-    return packs;
+    const packsClean = packs.map((pack) => pack.dataValues);
+    return packsClean;
   }
 }

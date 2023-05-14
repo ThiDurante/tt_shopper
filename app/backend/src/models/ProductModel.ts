@@ -7,6 +7,7 @@ export default class ProductModel implements ProductModelI {
   private model: ModelStatic<Product> = Product;
   async getAllProducts(): Promise<ProductI[]> {
     const products = await this.model.findAll();
-    return products;
+    const productClean = products.map((product) => product.dataValues);
+    return productClean;
   }
 }
