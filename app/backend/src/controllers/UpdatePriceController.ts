@@ -8,7 +8,6 @@ export default class UpdatePriceController implements UpdatePriceControllerI {
   async updatePrice(req: Request, res: Response, next: NextFunction) {
     try {
       const result = await this.updatePriceService.updatePrice(req.body);
-      console.log('controller result', result);
 
       return res.status(200).json(result);
     } catch (error: any) {
