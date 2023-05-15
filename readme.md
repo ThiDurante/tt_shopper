@@ -18,7 +18,7 @@ Após clonar o repositório não esqueça de:
 
 Dentro da pasta app, troque o nome do arquivo .env.example para .env
   
-[!env](https://i.imgur.com/Hilhzoe.png)
+![env](https://i.imgur.com/Hilhzoe.png)
 
 ```bash
   # clone o repositório
