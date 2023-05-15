@@ -201,7 +201,11 @@ export default class UpdatePriceService implements UpdatePriceServiceI {
     // recalculates pack price and updates on db
     const updatedPacks: any = [];
     packs.forEach(async (pack: any) => {
-      if (updatedPacks.includes(pack.Product.code)) {
+      if (
+        updatedPacks.some(
+          (updatedPack: any) => updatedPack.pack_id === pack.pack_id
+        )
+      ) {
         const findPack = updatedPacks.find(
           (updatedPack: any) => updatedPack.Product.code === pack.Product.code
         );
