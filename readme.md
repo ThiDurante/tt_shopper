@@ -17,7 +17,8 @@ Temos duas maneiras para utilizar o projeto
 Após clonar o repositório não esqueça de:
 
 Dentro da pasta app, troque o nome do arquivo .env.example para .env
-[!env](./images/env.png)
+  
+[!env](https://i.imgur.com/Hilhzoe.png)
 
 ```bash
   # clone o repositório
@@ -50,7 +51,8 @@ Para o banco de dados sugiro usar workbench para popular o banco com o script pr
 Após clonar o repositório não esqueça de:
 
 Dentro da pasta app/backend, troque o nome do arquivo .envnodocker.example para .env
-[!env](./images/envnodocker.png)
+  
+![env](./images/envnodocker.png)
 
 ```bash
   # clone o repositório
@@ -82,9 +84,9 @@ O banco de dado em localhost:3306 (workbench)
 
 <details>
 
-[!photo](./images/site1.png)
-[!photo](./images/site2.png)
-[!photo](./images/site3.png)
+![photo](./images/site1.png)
+![photo](./images/site2.png)
+![photo](./images/site3.png)
 
 </details>
 
