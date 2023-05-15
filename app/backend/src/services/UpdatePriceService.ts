@@ -203,21 +203,23 @@ export default class UpdatePriceService implements UpdatePriceServiceI {
     packs.forEach(async (pack: any) => {
       if (
         updatedPacks.some(
-          (updatedPack: any) => updatedPack.pack_id === pack.pack_id
+          (updatedPack: any) =>
+            +updatedPack.pack_id === +pack.pack_id && updatedPack.packPrice
         )
       ) {
         const findPack = updatedPacks.find(
-          (updatedPack: any) => updatedPack.Product.code === pack.Product.code
+          (updatedPack: any) => +updatedPack.pack_id === +pack.pack_id
         );
-        findPack.packPrice += pack.Product.sales_price * pack.qty;
+
+        findPack.packPrice += pack.product.sales_price * pack.qty;
+      } else {
+        const packPrice = pack.product.sales_price * pack.qty;
+        updatedPacks.push({ ...pack, packPrice });
       }
-      const packPrice = pack.Product.sales_price * pack.qty;
-      updatedPacks.push({ ...pack, packPrice });
     });
+    console.log(updatedPacks);
     const updating = Promise.all(
       updatedPacks.map((pack: any) => {
-        console.log(pack);
-
         this.productService.updateProductPrice(pack.pack_id, pack.packPrice);
       })
     );

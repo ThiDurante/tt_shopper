@@ -1,0 +1,17 @@
+.head {
+  background-color: aliceblue;
+  text-align: center;
+  padding: 3px;
+  margin-left: 10px;
+}
+
+.body {
+  background-color: aliceblue;
+  text-align: center;
+  padding: 3px;
+  margin-left: 10px;
+}
+
+td {
+  padding: 5px;
+}

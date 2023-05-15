@@ -7,8 +7,10 @@ import Product from '../database/models/Product';
 export default class PackModel implements PackModelI {
   private model: ModelStatic<Pack> = Pack;
   async getAllPacks(): Promise<PackI[]> {
-    const packs = await this.model.findAll({ include: Product });
-    const packsClean = packs.map((pack) => pack.dataValues);
+    const packs = (await this.model.findAll({ include: Product })) as any;
+    const packsClean = packs.map((pack: any) => {
+      return { ...pack.dataValues, product: pack.Product.dataValues };
+    });
     return packsClean;
   }
   // find by packid

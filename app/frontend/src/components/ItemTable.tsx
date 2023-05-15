@@ -1,9 +1,10 @@
 import React from 'react'
+import '../CSS/ItemTable.css'
 
 export default function ItemTable({ products }: any) {
   return (
     <table>
-      <thead>
+      <thead className="head">
         <tr>
           <th>Código</th>
           <th>Nome</th>
@@ -13,7 +14,7 @@ export default function ItemTable({ products }: any) {
           <th>Erro</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody className="body">
         {products.map((item: any) => (
           <tr key={item.product_code}>
             <td>{item.product_code}</td>

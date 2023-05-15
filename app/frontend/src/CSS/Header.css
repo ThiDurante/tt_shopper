@@ -6,3 +6,17 @@
   color: white;
   font-size: 25px;
 }
+
+a {
+  text-decoration: none;
+  color: white;
+  transition: 0.5s;
+}
+
+a:hover {
+  color: rgb(0, 0, 0);
+  background-color: rgb(255, 255, 255);
+  border-radius: 5px;
+  padding: 5px;
+  zoom: 1.5;
+}

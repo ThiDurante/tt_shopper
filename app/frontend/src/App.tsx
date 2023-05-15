@@ -1,6 +1,8 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import Papa, { ParseResult } from 'papaparse';
 import ItemTable from './components/ItemTable';
+import './CSS/App.css'
+import Header from './components/Header';
 
 type Data = {
   codigo: string;
@@ -103,33 +105,36 @@ function App() {
 
   return (
     <div className="main-container">
-      <h1>Atualização de preços</h1>
-      <p>Como utilizar:</p>
-      <p>
-        Carregue um arquivo CSV com o código do produto a ser reajustado e o
-        novo valor
-      </p>
-      <p>
-        Clique em <strong>VALIDAR</strong>
-      </p>
-      <p>O sistema se encarregará de checar se tudo está ok</p>
-      <form onSubmit={handleValidate}>
-        <input
-          type="file"
-          name="novo_preço"
-          accept=".csv"
-          onChange={handleFileChange}
+      <Header />
+      <div className="content">
+        <h1>Atualização de preços</h1>
+        <p>Como utilizar:</p>
+        <p>
+          Carregue um arquivo CSV com o código do produto a ser reajustado e o
+          novo valor
+        </p>
+        <p>
+          Clique em <strong>VALIDAR</strong>
+        </p>
+        <p>O sistema se encarregará de checar se tudo está ok</p>
+        <form className="form" onSubmit={handleValidate}>
+          <input
+            type="file"
+            name="novo_preço"
+            accept=".csv"
+            onChange={handleFileChange}
 
-        />
-        <button type="submit">VALIDAR</button>
-      </form>
-      {validatedData && <ItemTable products={validatedData} />}
-      {readyToUpload && (
-        <button type="button" onClick={handleReady}>
-          ATUALIZAR
-        </button>
-      )}
-      {error && <p>{error}</p>}
+          />
+          <button type="submit">VALIDAR</button>
+        </form>
+        {validatedData && <ItemTable products={validatedData} />}
+        {readyToUpload && (
+          <button className="atualizar-btn" type="button" onClick={handleReady}>
+            ATUALIZAR
+          </button>
+        )}
+        {error && <p>{error}</p>}
+      </div>
     </div>
   );
 }
