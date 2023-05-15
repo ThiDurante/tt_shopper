@@ -94,3 +94,14 @@ O banco de dado em localhost:3306 (workbench)
 Front-end: ReactJS, Cypress, Typescript
 Back-end: Node, Express, Sequelize, Typescript
 </details>
+
+## Sobre Mim
+
+Sou um desenvolvedor Full-Stack, trabalho com a stack de node/react e estou sempre procurando coisas novas para aprender :)
+
+## Autor
+
+- [@ThiDurante](https://www.github.com/ThiDurante)
+- [Linkedin](https://www.linkedin.com/in/thidurante/)
+
+## Agradecimentos
