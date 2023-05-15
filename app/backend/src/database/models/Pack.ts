@@ -1,5 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelizeCon from '../connection';
+import Product from './Product';
 
 export default class Pack extends Model {
   public id!: number;
@@ -17,10 +18,18 @@ Pack.init(
     pack_id: {
       type: DataTypes.BIGINT,
       allowNull: false,
+      references: {
+        model: Product,
+        key: 'code',
+      },
     },
     product_id: {
       type: DataTypes.BIGINT,
       allowNull: false,
+      references: {
+        model: Product,
+        key: 'code',
+      },
     },
     qty: {
       type: DataTypes.BIGINT,
@@ -33,3 +42,6 @@ Pack.init(
     timestamps: false,
   }
 );
+
+Pack.belongsTo(Product, { foreignKey: 'pack_id' });
+Pack.belongsTo(Product, { foreignKey: 'product_id' });

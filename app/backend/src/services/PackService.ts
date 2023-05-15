@@ -11,4 +11,9 @@ export default class PackService implements PackServiceI {
     const packs = await this.packModel.getAllPacks();
     return packs;
   }
+
+  // async findByPackId(id: number): Promise<PackI> {
+  //   const pack = await this.packModel.findByPackId();
+  //   return pack;
+  // }
 }

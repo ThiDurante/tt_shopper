@@ -1,3 +1,4 @@
+import PackI from '../interfaces/Pack/PackI';
 import PackServiceI from '../interfaces/Pack/PackServiceI';
 import ProductI from '../interfaces/Product/ProductI';
 import ProductServiceI from '../interfaces/Product/ProductServiceI';
@@ -38,6 +39,7 @@ export default class UpdatePriceService implements UpdatePriceServiceI {
     if (noErrors) {
       // update products on db and return success message
       await this.updateProducts(productsValidated);
+      await this.updatePacks();
     }
     return productsValidated;
   };
@@ -192,5 +194,29 @@ export default class UpdatePriceService implements UpdatePriceServiceI {
       return { ...product, oldPrice: '', name: '' };
     });
     return formattedSuccessProducts;
+  }
+  async updatePacks(): Promise<void> {
+    // get all packs
+    const packs = await this.packService.getAllPacks();
+    // recalculates pack price and updates on db
+    const updatedPacks: any = [];
+    packs.forEach(async (pack: any) => {
+      if (updatedPacks.includes(pack.Product.code)) {
+        const findPack = updatedPacks.find(
+          (updatedPack: any) => updatedPack.Product.code === pack.Product.code
+        );
+        findPack.packPrice += pack.Product.sales_price * pack.qty;
+      }
+      const packPrice = pack.Product.sales_price * pack.qty;
+      updatedPacks.push({ ...pack, packPrice });
+    });
+    const updating = Promise.all(
+      updatedPacks.map((pack: any) => {
+        console.log(pack);
+
+        this.productService.updateProductPrice(pack.pack_id, pack.packPrice);
+      })
+    );
+    await updating;
   }
 }

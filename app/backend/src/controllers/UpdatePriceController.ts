@@ -22,7 +22,6 @@ export default class UpdatePriceController implements UpdatePriceControllerI {
   ): Promise<void | Response<any, Record<string, any>>> {
     try {
       const result = await this.updatePriceService.updatePrice(req.body);
-      console.log(result);
 
       return res.status(200).json(result);
     } catch (error: any) {
