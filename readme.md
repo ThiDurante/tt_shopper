@@ -82,9 +82,9 @@ O banco de dado em localhost:3306 (workbench)
 
 <details>
 
-[!photo](/images/site1.png)
-[!photo](/images/site2.png)
-[!photo](/images/site3.png)
+[!photo](./images/site1.png)
+[!photo](./images/site2.png)
+[!photo](./images/site3.png)
 
 </details>
 
