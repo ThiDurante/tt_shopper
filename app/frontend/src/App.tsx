@@ -107,7 +107,7 @@ function App() {
     <div className="main-container">
       <Header />
       <div className="content">
-        <h1>Atualização de preços</h1>
+        <h1>Atualização de Preços</h1>
         <p>Como utilizar:</p>
         <p>
           Carregue um arquivo CSV com o código do produto a ser reajustado e o

@@ -22,7 +22,7 @@ export default function ItemTable({ products }: any) {
             <td>{item.oldPrice}</td>
             <td>{item.new_price}</td>
             <td>{item.updated ? 'Sim' : 'Não'}</td>
-            <td>{item.error ? (item.error).slice(0, -2) : 'Não'}</td>
+            <td data-cy="error">{item.error ? (item.error).slice(0, -2) : 'Não'}</td>
           </tr>
         ))}
       </tbody>
