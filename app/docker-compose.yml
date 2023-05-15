@@ -2,6 +2,7 @@ version: '3'
 services:
   frontend:
     build: ./frontend
+    container_name: frontend
     ports:
       - "3000:3000"
     working_dir: /app-frontend
