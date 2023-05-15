@@ -113,6 +113,7 @@ function App() {
           Carregue um arquivo CSV com o código do produto a ser reajustado e o
           novo valor
         </p>
+        <p>Lembre-se que ao ajustar um produto que esteja em um pacote, o pacote também será reajustado</p>
         <p>
           Clique em <strong>VALIDAR</strong>
         </p>
