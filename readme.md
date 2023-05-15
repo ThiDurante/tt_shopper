@@ -11,8 +11,13 @@ Testes foram feitos com Cypress no front end.
 
 Temos duas maneiras para utilizar o projeto
 
+1. Usando [Docker](https://www.docker.com/)
 <details>
-1) Usando  [Docker](https://www.docker.com/)
+
+Após clonar o repositório não esqueça de:
+
+Dentro da pasta app, troque o nome do arquivo .env.example para .env
+[!env](./images/env.png)
 
 ```bash
   # clone o repositório
@@ -25,6 +30,42 @@ Temos duas maneiras para utilizar o projeto
   # repita o npm run
   # Após isso rode o comando
   docker compose up
+```
+
+Depois é só esperar o tempo de build (pode demorar um pouco dependendo do computador/internet)
+
+O front end estará rodando em localhost:3000 (broswer)
+
+A API em localhost:3001 (postman ou simular)
+
+O banco de dado em localhost:3306 (workbench)
+
+</details>
+2. Sem Docker
+<details>
+
+Aqui você terá que ter o mysql instalado no seu computador
+Para o banco de dados sugiro usar workbench para popular o banco com o script provido pela shopper (database.sql) disponível em /app
+
+Após clonar o repositório não esqueça de:
+
+Dentro da pasta app/backend, troque o nome do arquivo .envnodocker.example para .env
+[!env](./images/envnodocker.png)
+
+```bash
+  # clone o repositório
+  # entre na pasta app
+  cd tt_shopper/app
+  # rode o script de Instalação de dependencias
+  npm run install:app
+  # caso tenha problemas de permissão neste passo use:
+  chmod +x app_install.sh
+  # repita o npm run
+  # abra dois terminais novos
+  # um deve estar dentro de /app/fronend e rode o comando
+  npm start
+  # o outro deve estar dentro de /app/backend e rode o comando
+  npm start
 ```
 
 Depois é só esperar o tempo de build (pode demorar um pouco dependendo do computador/internet)
