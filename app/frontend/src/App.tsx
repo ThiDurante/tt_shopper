@@ -117,7 +117,7 @@ function App() {
           Clique em <strong>VALIDAR</strong>
         </p>
         <p>Se estiver tudo ok, o botão de Atualizar aparecerá</p>
-        <p>Confirme suas alterações e clique nele para atualizar os preços</p>
+        <p>Confirme suas alterações e clique em ATUALIZAR para atualizar os preços</p>
         <form className="form" onSubmit={handleValidate}>
           <input
             type="file"
