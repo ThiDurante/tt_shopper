@@ -11,7 +11,7 @@ Testes foram feitos com Cypress no front end.
 
 Temos duas maneiras para utilizar o projeto
 
-1. Usando [Docker](https://www.docker.com/)
+1. Usando [Docker](https://www.docker.com/) (forma esperada de utilização)
 <details>
 
 Após clonar o repositório não esqueça de:
@@ -45,7 +45,7 @@ O banco de dado em localhost:3306 (workbench)
 <details>
 
 Aqui você terá que ter o mysql instalado no seu computador
-Para o banco de dados sugiro usar workbench para popular o banco com o script provido pela shopper (database.sql) disponível em /app
+Para o banco de dados sugiro usar workbench para popular o banco com o script provido pela shopper (database.sql) disponível em /appgit add
 
 Após clonar o repositório não esqueça de:
 
@@ -76,4 +76,21 @@ A API em localhost:3001 (postman ou simular)
 
 O banco de dado em localhost:3306 (workbench)
 
+</details>
+
+## Screenshots
+
+<details>
+
+[!photo](/images/site1.png)
+[!photo](/images/site2.png)
+[!photo](/images/site3.png)
+
+</details>
+
+## Stacks Utilizadas
+
+<details>
+Front-end: ReactJS, Cypress, Typescript
+Back-end: Node, Express, Sequelize, Typescript
 </details>
