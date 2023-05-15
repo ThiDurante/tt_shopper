@@ -128,11 +128,11 @@ export default class UpdatePriceService implements UpdatePriceServiceI {
         ];
         if (newPrice < tenPercentRange[0]) {
           product.updated = false;
-          product.error += `aumento maior que 10%, `;
+          product.error += `diminuição maior que 10%, `;
         }
         if (newPrice > tenPercentRange[1]) {
           product.updated = false;
-          product.error += `diminuição maior que 10%, `;
+          product.error += `aumento maior que 10%, `;
         }
       }
     });

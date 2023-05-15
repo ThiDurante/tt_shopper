@@ -15,14 +15,14 @@ export default function ItemTable({ products }: any) {
         </tr>
       </thead>
       <tbody className="body">
-        {products.map((item: any) => (
-          <tr key={item.product_code}>
+        {products.map((item: any, index: number) => (
+          <tr key={index}>
             <td>{item.product_code}</td>
             <td>{item.name}</td>
             <td>{item.oldPrice}</td>
             <td>{item.new_price}</td>
             <td>{item.updated ? 'Sim' : 'Não'}</td>
-            <td>{item.error ? item.error : 'Não'}</td>
+            <td>{item.error ? (item.error).slice(0, -2) : 'Não'}</td>
           </tr>
         ))}
       </tbody>
