@@ -5,6 +5,16 @@ export type Data = {
   new_price: 'string';
 };
 
+export type validationProduct = {
+  product_code: string;
+  updated: boolean;
+  error: string;
+  new_price: string;
+};
+
 export default interface UpdatePriceServiceI {
-  updatePrice(file: Data[]): Promise<UpdatePriceResponseI | string>;
+  validate(file: Data[]): Promise<UpdatePriceResponseI[] | validationProduct[]>;
+  updatePrice(
+    productsValidated: UpdatePriceResponseI[]
+  ): Promise<UpdatePriceResponseI[]>;
 }

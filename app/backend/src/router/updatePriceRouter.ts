@@ -18,7 +18,12 @@ const updatePriceService = new UpdatePriceService(productService, packService);
 const updatePriceController = new UpdatePriceController(updatePriceService);
 
 updatePriceRouter.post(
-  '/updatePrice',
+  '/validate',
+  updatePriceController.validate.bind(updatePriceController)
+);
+
+updatePriceRouter.post(
+  '/updateprice',
   updatePriceController.updatePrice.bind(updatePriceController)
 );
 

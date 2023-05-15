@@ -1,8 +1,15 @@
 export default interface UpdatePriceResponseI {
-  codigo: number;
+  product_code: string;
   name: string;
-  newPrice: number;
-  oldPrice: number;
+  new_price: string;
+  oldPrice: string;
   updated: boolean;
   error: string;
 }
+
+type validationProduct = {
+  product_code: string;
+  updated: boolean;
+  error: string;
+  new_price: string;
+};

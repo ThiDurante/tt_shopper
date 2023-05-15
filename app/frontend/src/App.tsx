@@ -1,16 +1,27 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import Papa, { ParseResult } from 'papaparse';
+import ItemTable from './components/ItemTable';
 
 type Data = {
   codigo: string;
   novo_preco: string;
 };
 
+type UpdatePriceResponseI = {
+  product_code: string;
+  name: string;
+  new_price: string;
+  oldPrice: string;
+  updated: boolean;
+  error: string;
+}
+
 
 function App() {
   const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
-
+  const [validatedData, setValidatedData] = useState<UpdatePriceResponseI[] | null>(null);
+  const [readyToUpload, setReadyToUpload] = useState<boolean>(false);
 
   const parseCSV = (file: File) => {
     Papa.parse(file, {
@@ -23,9 +34,13 @@ function App() {
     });
   };
 
+  useEffect(() => {
+    checkIfReady();
+  }, [validatedData])
+
   const handleParseComplete = async (results: ParseResult<Data>) => {
     const result = await uploadFile(results.data)
-    console.log(result);
+    setValidatedData(result);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,14 +58,36 @@ function App() {
     try {
       parseCSV(file);
     } catch (error: any) {
-      console.log(error);
       setError(error.message);
     }
-
   };
 
+  const checkIfReady = () => {
+    if (validatedData) {
+      const ready = validatedData.every((item) => item.updated);
+      setReadyToUpload(ready);
+    }
+  }
+
+  const handleReady = async () => {
+    try {
+      await fetch('http://localhost:3001/updateprice', {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: 'include',
+        mode: 'cors',
+        body: JSON.stringify(validatedData),
+      });
+    } catch (error: any) {
+      setError(error.message);
+    }
+    window.location.reload();
+  }
+
   const uploadFile = async (parsedValue: any) => {
-    const response = await fetch('http://localhost:3001/updateprice', {
+    const response = await fetch('http://localhost:3001/validate', {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
@@ -81,9 +118,16 @@ function App() {
           name="novo_preço"
           accept=".csv"
           onChange={handleFileChange}
+
         />
         <button type="submit">VALIDAR</button>
       </form>
+      {validatedData && <ItemTable products={validatedData} />}
+      {readyToUpload && (
+        <button type="button" onClick={handleReady}>
+          ATUALIZAR
+        </button>
+      )}
       {error && <p>{error}</p>}
     </div>
   );

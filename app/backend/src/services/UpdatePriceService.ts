@@ -4,14 +4,8 @@ import ProductServiceI from '../interfaces/Product/ProductServiceI';
 import UpdatePriceResponseI from '../interfaces/updatePrice/UpdatePriceResponseI';
 import UpdatePriceServiceI, {
   Data,
+  validationProduct,
 } from '../interfaces/updatePrice/UpdatePriceServiceI';
-
-type validationProduct = {
-  product_code: string;
-  updated: boolean;
-  error: string;
-  new_price: string;
-};
 
 export default class UpdatePriceService implements UpdatePriceServiceI {
   constructor(
@@ -19,24 +13,40 @@ export default class UpdatePriceService implements UpdatePriceServiceI {
     private packService: PackServiceI
   ) {}
 
-  async updatePrice(file: Data[]): Promise<UpdatePriceResponseI | string> {
+  async validate(
+    file: Data[]
+  ): Promise<UpdatePriceResponseI[] | validationProduct[]> {
     const products = await this.productService.getAllProducts();
     // find which products are in the file
     const productsToUpdate = products.filter((product) => {
       return file.some((data) => +data.product_code === +product.code);
     });
-    const validatedProducts: validationProduct[] = await this.validateProducts(
+    const validatedProducts = await this.validateProducts(
       productsToUpdate,
       file
     );
-
-    throw new Error('Method not implemented.');
+    return validatedProducts;
   }
+
+  updatePrice = async (
+    productsValidated: UpdatePriceResponseI[]
+  ): Promise<UpdatePriceResponseI[]> => {
+    //checking errors
+    const noErrors = productsValidated.every(
+      (product) => product.updated === true
+    );
+    if (noErrors) {
+      // update products on db and return success message
+      await this.updateProducts(productsValidated);
+    }
+    return productsValidated;
+  };
+
   // calls all the validations and returns an array of products to update
   async validateProducts(
     dbProducts: ProductI[],
     fileProducts: Data[]
-  ): Promise<validationProduct[]> {
+  ): Promise<UpdatePriceResponseI[] | validationProduct[]> {
     const ArrayChecked = this.checkIfFieldsAreValid(fileProducts);
 
     const ArrayExistsChecked = await this.checkIfProductsExists(ArrayChecked);
@@ -48,16 +58,7 @@ export default class UpdatePriceService implements UpdatePriceServiceI {
       dbProducts,
       ArrayExistsAndPriceChecked
     );
-    console.log(1, ArrayExistsPriceandCostChecked);
-
-    //checking errors
-    const noErrors = ArrayExistsPriceandCostChecked.every(
-      (product) => product.updated === true
-    );
-    if (noErrors) {
-      // update products on db and return success message
-    }
-    return ArrayExistsPriceandCostChecked;
+    return this.formatResponse(dbProducts, ArrayExistsPriceandCostChecked);
   }
   // checks if fields in file are all valid
   checkIfFieldsAreValid(fileProducts: Data[]): validationProduct[] {
@@ -66,16 +67,20 @@ export default class UpdatePriceService implements UpdatePriceServiceI {
         return {
           ...product,
           updated: false,
-          error: 'product_code is missing. ',
+          error: 'código do produto está faltando, ',
         };
       if (!product.new_price) {
-        return { ...product, updated: false, error: 'new_price is missing. ' };
+        return {
+          ...product,
+          updated: false,
+          error: 'novo preço está faltando, ',
+        };
       }
       if (isNaN(+product.new_price)) {
         return {
           ...product,
           updated: false,
-          error: 'new_price is not a number. ',
+          error: 'novo preço não é um número, ',
         };
       }
       return { ...product, updated: true, error: '' };
@@ -94,7 +99,7 @@ export default class UpdatePriceService implements UpdatePriceServiceI {
         );
         if (!productExists) {
           product.updated = false;
-          product.error += `product_code does not exist. `;
+          product.error += `produto não existe, `;
         }
       })
     );
@@ -111,7 +116,7 @@ export default class UpdatePriceService implements UpdatePriceServiceI {
         (dbProduct) => +dbProduct.code === +product.product_code
       );
       //check if price is over or under 10% of current price
-      if (productToUpdate) {
+      if (productToUpdate && product.new_price) {
         const currentPrice = +productToUpdate.sales_price;
         const newPrice = +product.new_price;
         const tenPercent = currentPrice * 0.1;
@@ -121,11 +126,11 @@ export default class UpdatePriceService implements UpdatePriceServiceI {
         ];
         if (newPrice < tenPercentRange[0]) {
           product.updated = false;
-          product.error += `more than 10% discount. `;
+          product.error += `aumento maior que 10%, `;
         }
         if (newPrice > tenPercentRange[1]) {
           product.updated = false;
-          product.error += `more than 10% increse. `;
+          product.error += `diminuição maior que 10%, `;
         }
       }
     });
@@ -146,25 +151,46 @@ export default class UpdatePriceService implements UpdatePriceServiceI {
         const newPrice = +fileProduct.new_price;
         if (newPrice < costPrice) {
           fileProduct.updated = false;
-          fileProduct.error += `price is lower than cost. `;
+          fileProduct.error += `preço menor que custo, `;
         }
       }
     });
     return fileProducts;
   }
 
-  async updateProducts(
-    products: validationProduct[]
-  ): Promise<UpdatePriceResponseI[]> {
-    const updatedProducts: UpdatePriceResponseI[] = [];
-    products.forEach(async (product) => {
-      if (product.updated) {
-        const updatedProduct = await this.productService.updateProductPrice(
-          product.product_code,
-          product.new_price
-        );
+  async updateProducts(products: validationProduct[]): Promise<string> {
+    const updatedProducts = Promise.all(
+      products.map(async (product) => {
+        if (product.updated) {
+          await this.productService.updateProductPrice(
+            product.product_code,
+            String(Number(product.new_price).toFixed(2))
+          );
+        }
+      })
+    );
+    await updatedProducts;
+    return 'ok';
+  }
+
+  async formatResponse(
+    dbProducts: ProductI[],
+    productsValidated: validationProduct[]
+  ) {
+    const formattedSuccessProducts = productsValidated.map((product) => {
+      const dbProduct = dbProducts.find(
+        (dbProduct) => +dbProduct.code === +product.product_code
+      );
+      if (dbProduct) {
+        return {
+          ...product,
+          oldPrice: String(dbProduct.sales_price),
+          name: dbProduct.name,
+        };
       }
+      // this should never happen just here for typescript
+      return { ...product, oldPrice: '', name: '' };
     });
-    return updatedProducts;
+    return formattedSuccessProducts;
   }
 }
