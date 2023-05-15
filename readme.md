@@ -50,7 +50,11 @@ Para o banco de dados sugiro usar workbench para popular o banco com o script pr
 
 Após clonar o repositório não esqueça de:
 
-Dentro da pasta app/backend, troque o nome do arquivo .envnodocker.example para .env
+Dentro da pasta app/backend, troque o nome do arquivo .env.examplenodocker para .env
+
+Altere as variáveis de ambiente para irem de acordo ao seu database
+  
+Caso tenha criado um DB padrão com a senha do usuário root sendo password, não precisa mudar nada.
   
 ![env](./images/envnodocker.png)
 
