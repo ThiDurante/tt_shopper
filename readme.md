@@ -84,6 +84,18 @@ O banco de dado em localhost:3306 (workbench)
 
 </details>
 
+## Testes
+
+<details>
+Para os testes funcionarem, as dependencias tem que estar instaladas e o aplicativo rodando (pode ser pelo docker ou sem ele)
+
+Entre na pasta de frontend (/app/frontend)
+
+Use o comando: npx cypress open
+
+Selecione o browser e rode o teste app_test
+</details>
+
 ## Screenshots
 
 <details>
