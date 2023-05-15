@@ -75,4 +75,8 @@ describe('Testes de upload de arquivo', () => {
       .should('have.text', 'ATUALIZAR');
     buttonAtualizar.click();
   });
+  it('Teste final clica no link do github :)', () => {
+    const github = cy.get('a');
+    github.click();
+  });
 });

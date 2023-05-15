@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "install:app": "./app_install.sh"
+  },
   "devDependencies": {
     "nodemon": "^2.0.22"
   }
